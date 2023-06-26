@@ -44,21 +44,23 @@
                     <input-container-component titulo="Nome da marca" id="novoNome" id-help="novoNomeHelp"
                         texto-ajuda="Informe o nome da marca">
                         <input type="text" placeholder="Nome da marca" class="form-control" id="novoNome"
-                            aria-describedby="novoNomeHelp">
+                            aria-describedby="novoNomeHelp" v-model="nomeMarca">
                     </input-container-component>
+                    {{ nomeMarca  }}
                 </div>
 
                 <div class="form-group">
                     <input-container-component titulo="Imagem" id="novoImagem" id-help="novoImagemHelp"
-                        texto-ajuda="Informe o nome da marca">
+                        texto-ajuda="Imagem">
                         <input type="file" placeholder="Selecione uma imagem" class="form-control-file" id="novoImagem"
-                            aria-describedby="novoImagemHelp">
+                            aria-describedby="novoImagemHelp" @change="carregarImagem($event)">
                     </input-container-component>
+                    {{ arquivoImagem }}
                 </div>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Salvar</button>
+                <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
             </template>
         </modal-component>
 
@@ -66,4 +68,38 @@
 </template>
 
 <script>
+    export default {
+        data(){
+            return {
+                urlBase: 'http://localhost:8000/api/v1/marcas',
+                nomeMarca: '',
+                arquivoImagem: []
+            }
+        },
+        methods: {
+            carregarImagem(e){
+                this.arquivoImagem = e.target.files[0];
+            },
+            salvar(){
+                console.log(this.nomeMarca);
+                console.log(this.arquivoImagem);
+
+                let formData = new FormData();
+                formData.append('nome', this.nomeMarca);
+                formData.append('imagem', this.arquivoImagem);
+
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Accept': 'application/json'
+                    }
+                }
+                axios.post(this.urlBase, formData , config).then((response) => {
+                    console.log(response);
+                }).catch((error) => {
+                    console.log(error);
+                });
+            }
+        }
+    }
 </script>
