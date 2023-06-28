@@ -71,7 +71,7 @@
     export default {
         data(){
             return {
-                urlBase: 'http://localhost:8000/api/v1/marcas',
+                urlBase: 'http://localhost:8000/api/v1/marca',
                 nomeMarca: '',
                 arquivoImagem: []
             }
