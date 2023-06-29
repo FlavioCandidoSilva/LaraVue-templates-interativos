@@ -77,6 +77,11 @@
             }
         },
         methods: {
+            computed:{
+                token(){
+                    return 'Teste'
+                }
+            },
             carregarImagem(e){
                 this.arquivoImagem = e.target.files[0];
             },
@@ -91,7 +96,8 @@
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Authorization': this.token
                     }
                 }
                 axios.post(this.urlBase, formData , config).then((response) => {
